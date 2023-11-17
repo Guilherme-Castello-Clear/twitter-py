@@ -1,4 +1,3 @@
-from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
@@ -10,7 +9,7 @@ chrome_options.add_experimental_option("detach", True)
 PROMISED_DOWN = 150
 PROMISED_UP = 10
 TWITTER_EMAIL = "guiauguisto.castello@gmail.com"
-TWITTER_PASSWORD = "nop"
+TWITTER_PASSWORD = "evcsmhjAS23#0"
 
 
 class InternetSpeedTwitterBot:
@@ -29,11 +28,32 @@ class InternetSpeedTwitterBot:
             '//*[@id="container"]/div/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[2]/div/div[2]/span').text
         self.down = self.driver.find_element(By.XPATH,
             '//*[@id="container"]/div/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[3]/div/div[2]/span').text
-        
+
     def tweet_at_provider(self):
-        pass
+        self.driver.get("https://twitter.com/login")
+        time.sleep(2)
+        email = self.driver.find_element(By.XPATH,
+            '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/form/div/div[1]/label/div/div[2]/div/input')
+        password = self.driver.find_element(By.XPATH,
+            '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/form/div/div[2]/label/div/div[2]/div/input')
 
+        email.send_keys(TWITTER_EMAIL)
+        password.send_keys(TWITTER_PASSWORD)
+        time.sleep(2)
+        password.send_keys(Keys.ENTER)
+        time.sleep(5)
+        tweet_compose = self.driver.find_element(By.XPATH,
+            '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div[2]/div[1]/div/div/div/div[2]/div[2]/div[2]/div/div/div/div[3]/div/span')
+        tweet = f"Hey Internet Provider, why is my internet speed {self.down}down/{self.up}up when I pay for {PROMISED_DOWN}down/{PROMISED_UP}up?"
+        tweet_compose.send_keys(tweet)
+        time.sleep(3)
 
+        tweet_button = self.driver.find_element(By.XPATH,
+            '<span class="css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0" style="text-overflow: unset;">Postar</span>')
+        tweet_button.click()
+
+        time.sleep(2)
+        self.driver.quit()
 
 
 bot = InternetSpeedTwitterBot(chrome_options)
